@@ -1,4 +1,4 @@
-package yt.alex.automation.browser.test;
+package yt.alex.automation.browser.google.test.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -6,9 +6,12 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import yt.alex.browser.automation.CheckPositionHtmlUnit;
+import yt.alex.automation.browser.google.CheckPositionHtmlUnit;
+import yt.alex.automation.browser.google.IGoogleConst;
+import yt.alex.automation.browser.google.test.IFunctionnalTest;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -27,19 +30,19 @@ public class TestHtmlUnit implements IFunctionnalTest {
             final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_24);
             HtmlPage page;
 
-            page = webClient.getPage(IFunctionnalTest.STR_URL_GOOGLE);
+            page = webClient.getPage(IGoogleConst.STR_URL_GOOGLE);
 
-            assertEquals(IFunctionnalTest.STR_TITLE_GOOGLE, page.getTitleText());
+            assertEquals(IGoogleConst.STR_TITLE_GOOGLE, page.getTitleText());
 
             HtmlForm form = page.getForms().get(0);
-            HtmlTextInput textField = form.getInputByName(IFunctionnalTest.STR_INPUT_SEARCH_TEXT_GOOGLE);
+            HtmlTextInput textField = form.getInputByName(IGoogleConst.STR_INPUT_SEARCH_TEXT_GOOGLE);
             textField.setValueAttribute(IFunctionnalTest.STR_SEARCH_TEST);
 
-            HtmlButton button = (HtmlButton) form.getElementsByAttribute("button", "name", IFunctionnalTest.STR_INPUT_SEARCH_BUTTON_GOOGLE).get(0);
+            HtmlButton button = (HtmlButton) form.getElementsByAttribute("button", "name", IGoogleConst.STR_INPUT_SEARCH_BUTTON_GOOGLE).get(0);
 
             HtmlPage page2 = button.click();
 
-            assertEquals(IFunctionnalTest.STR_TITLE_GOOGLE_SEARCH, page2.getTitleText());
+            assertEquals(IGoogleConst.STR_TITLE_GOOGLE_SEARCH, page2.getTitleText());
 
             webClient.closeAllWindows();
         } catch (FailingHttpStatusCodeException e) {
@@ -55,5 +58,12 @@ public class TestHtmlUnit implements IFunctionnalTest {
     public void testCheckPage() {
         assertEquals(1, new CheckPositionHtmlUnit().checkPosition("Alexis DELAPORTE", "http://www.alexis-delaporte.com/"));
         assertEquals(7, new CheckPositionHtmlUnit().checkPosition("DELAPORTE", "http://www.alexis-delaporte.com/"));
+    }
+
+    @Test
+    @Ignore
+    public void testGoogleAutocomplete() {
+        // TODO Auto-generated method stub
+        
     }
 }
