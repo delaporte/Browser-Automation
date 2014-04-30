@@ -1,29 +1,25 @@
-package yt.alex.automation.browser.google.test.impl;
+package yt.alex.automation.browser.google.impl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
-import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import yt.alex.automation.browser.google.ICheckPosition;
 import yt.alex.automation.browser.google.IGoogleConst;
-import yt.alex.automation.browser.google.impl.CheckPositionHttpUnit;
-import yt.alex.automation.browser.google.test.IFunctionnalTest;
 
 import com.meterware.httpunit.GetMethodWebRequest;
 import com.meterware.httpunit.HttpUnitOptions;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebForm;
+import com.meterware.httpunit.WebLink;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
 
-public class TestHttpUnit implements IFunctionnalTest {
+public class CheckPositionHttpUnit implements ICheckPosition {
 
-    @Test
-    public void testGoogleSearch() {
+    public int checkPosition(String search, String url) {
         try {
             //La moindre erreur JS leve une EcmaError, c'est un peu trop exigent donc on desactive
             HttpUnitOptions.setScriptingEnabled(false);
@@ -32,14 +28,35 @@ public class TestHttpUnit implements IFunctionnalTest {
             WebRequest request = new GetMethodWebRequest(IGoogleConst.STR_URL_GOOGLE);
 
             WebResponse response = conversation.getResponse(request);
-            assertEquals(IGoogleConst.STR_TITLE_GOOGLE, response.getTitle());
             
             WebForm searchForm = response.getForms()[0];
             request = searchForm.getRequest(IGoogleConst.STR_INPUT_SEARCH_BUTTON_GOOGLE);
-            request.setParameter(IGoogleConst.STR_INPUT_SEARCH_TEXT_GOOGLE, IFunctionnalTest.STR_SEARCH_TEST);
+            request.setParameter(IGoogleConst.STR_INPUT_SEARCH_TEXT_GOOGLE, search);
             response = conversation.getResponse(request);
             
-            assertEquals(IGoogleConst.STR_TITLE_GOOGLE_SEARCH, response.getTitle());
+            for (int foundPage = 1; foundPage < 12; ++foundPage) {
+                
+                System.out.println(foundPage);
+                System.out.println(response.getTitle());
+                
+                //On parcourt les liens
+                WebLink[] nextPage = response.getLinks();
+                for (WebLink webLink : nextPage) {
+                    //Si on trouve l'url on est sur la bonne page
+                    if (webLink.getURLString().contains(url)){
+                        return foundPage;
+                    }
+                    System.out.println(webLink.getURLString());
+                    //Sinon on passe à la page suivante
+                    if (new Integer(foundPage + 1).equals(webLink.getText())){
+                        response = webLink.click();
+                    }
+                }
+
+                
+            }
+            
+            
         } // catch (IOException | SAXException e2){
         catch (IOException e) {
             fail(e.getMessage());
@@ -47,19 +64,6 @@ public class TestHttpUnit implements IFunctionnalTest {
             fail(e.getMessage());
         }
 
+        return 0;
     }
-
-    @Test
-    public void testCheckPage() {
-        assertEquals(1, new CheckPositionHttpUnit().checkPosition("Alexis DELAPORTE", "http://www.alexis-delaporte.com/"));
-        assertEquals(7, new CheckPositionHttpUnit().checkPosition("DELAPORTE", "http://www.alexis-delaporte.com/"));
-    }
-
-    @Test
-    @Ignore
-    public void testGoogleAutocomplete() {
-      //Couldn't load page without javascript error, can't test this
-        fail();
-    }
-
 }

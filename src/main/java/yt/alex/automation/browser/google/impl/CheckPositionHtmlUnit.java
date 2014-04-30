@@ -1,10 +1,13 @@
-package yt.alex.automation.browser.google;
+package yt.alex.automation.browser.google.impl;
 
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+
+import yt.alex.automation.browser.google.ICheckPosition;
+import yt.alex.automation.browser.google.IGoogleConst;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;

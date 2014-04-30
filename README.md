@@ -16,3 +16,4 @@ write "test" in Google search input and verify if autocomplete block is visible
 
 Check position of an url for a search in Google (args : search && url) 
 - HtmlUnit implementation + test case (could be KO if Google index move)
+- HttpUnit implementation + test case (could be KO if Google index move)

@@ -65,20 +65,26 @@ public class TestSelenium implements IFunctionnalTest {
 
     @Test
     public void testGoogleAutocomplete() {
+        //On fixe le timeout à 5 secondes
+        WebDriverWait  wait = new WebDriverWait(driver, 5);
+        
+        
         driver.get(IGoogleConst.STR_URL_GOOGLE);
         
-        WebElement autocompleteTable = driver.findElement(By.className(IGoogleConst.STR_AUTOCOMPLETE_TABLE_CLASS));
+        //On attend que la page soit chargée, javascript executé
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className(IGoogleConst.STR_AUTOCOMPLETE_TABLE_TD_CLASS)));
+        
+        WebElement autocompleteTable = driver.findElement(By.className(IGoogleConst.STR_AUTOCOMPLETE_TABLE_TD_CLASS));
         //Le bloc autocomplete ne doit pas être visible avant que l'on commence à entrer du texte
         assertEquals("none", autocompleteTable.getCssValue("display"));
         
         WebElement query = driver.findElement(By.name(IGoogleConst.STR_INPUT_SEARCH_TEXT_GOOGLE));
         query.sendKeys(IFunctionnalTest.STR_SEARCH_TEST);
         
-        WebDriverWait  wait = new WebDriverWait(driver, 5);
         //On attend que les propositions soient chargés
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.className(IGoogleConst.STR_AUTOCOMPLETE_TABLE_LINE_CLASS)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className(IGoogleConst.STR_AUTOCOMPLETE_TABLE_TD_LINE_CLASS)));
         
-        autocompleteTable = driver.findElement(By.className(IGoogleConst.STR_AUTOCOMPLETE_TABLE_CLASS));
+        autocompleteTable = driver.findElement(By.className(IGoogleConst.STR_AUTOCOMPLETE_TABLE_TD_CLASS));
         //Le bloc autocomplete doit maintenant être visible
         assertEquals("table-cell", autocompleteTable.getCssValue("display"));
     }
