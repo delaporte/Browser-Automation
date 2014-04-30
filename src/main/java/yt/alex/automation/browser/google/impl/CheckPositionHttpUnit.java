@@ -35,10 +35,6 @@ public class CheckPositionHttpUnit implements ICheckPosition {
             response = conversation.getResponse(request);
             
             for (int foundPage = 1; foundPage < 12; ++foundPage) {
-                
-                System.out.println(foundPage);
-                System.out.println(response.getTitle());
-                
                 //On parcourt les liens
                 WebLink[] nextPage = response.getLinks();
                 for (WebLink webLink : nextPage) {
@@ -46,9 +42,8 @@ public class CheckPositionHttpUnit implements ICheckPosition {
                     if (webLink.getURLString().contains(url)){
                         return foundPage;
                     }
-                    System.out.println(webLink.getURLString());
                     //Sinon on passe à la page suivante
-                    if (new Integer(foundPage + 1).equals(webLink.getText())){
+                    if (new Integer(foundPage + 1).toString().equals(webLink.getText())){
                         response = webLink.click();
                     }
                 }
