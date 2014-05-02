@@ -1,11 +1,9 @@
 package yt.alex.automation.browser.google.test.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import yt.alex.automation.browser.google.IGoogleConst;
+import yt.alex.automation.browser.google.impl.CheckPositionSelenium;
 import yt.alex.automation.browser.google.test.IFunctionnalTest;
 
 public class TestSelenium implements IFunctionnalTest {
@@ -57,10 +56,9 @@ public class TestSelenium implements IFunctionnalTest {
     }
 
     @Test
-    @Ignore
     public void testCheckPage() {
-        //Not yet implemented
-        fail();
+        assertEquals(1, new CheckPositionSelenium().checkPosition("Alexis DELAPORTE", "http://www.alexis-delaporte.com/"));
+        assertEquals(9, new CheckPositionSelenium().checkPosition("DELAPORTE", "http://www.alexis-delaporte.com/"));
     }
 
     @Test
